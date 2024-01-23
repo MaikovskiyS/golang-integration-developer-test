@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package integration.v1;
+
+service Service {
+  rpc GetBalance(GetBalanceRequest) returns (GetBalanceResponse) {}
+  rpc SendBet(SendBetRequest) returns (SendBetResponse) {}
+}
+
+message Currency {
+  string code = 1; // example: USD
+  string name = 2; // example: US Dollar
+}
+
+message Game {
+  string id = 1; // example: 521
+  string title = 2; // example: Diablo Immortal
+  string short_description = 3; // example: MMORPG game ...
+  string game_url = 4; // example: test.com/diablo
+}
+
+message Player {
+  string id = 1; // example: 1
+  string nickname = 2; // example: player_one
+}
+
+message General {
+  string platform = 1; // example: pc
+  Player player = 2;
+  Currency currency = 3;
+  string game_id = 4; // example: 521
+  string token = 6;  // example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+}
+
+message GetBalanceRequest {
+  General general = 1;
+}
+
+message GetBalanceResponse {
+  int32 balance = 1; // example: 100
+  Game game = 2;
+}
+
+message SendBetRequest {
+  General general = 1;
+  string transaction_id = 2; // example: 1
+  int32 amount = 3; // example: 10
+}
+
+message SendBetResponse {
+  int32 balance = 1; // example: 100
+}
