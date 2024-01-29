@@ -1,0 +1,17 @@
+
+{
+    "general": {
+      "platform": "pc",
+      "player": {
+        "id": "1",
+        "nickname": "player_one"
+      },
+      "currency": {
+        "code": "USD",
+        "name": "US Dollar"
+      },
+      "game_id": "521",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+    }
+  }
+
