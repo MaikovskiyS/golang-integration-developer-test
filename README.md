@@ -6,8 +6,7 @@ Implement simple integration grpc service.
 
 # Quick Start
 ```
-docker build -t integration_app .  
-docker run --rm -p 8080:8080 integration_app
+make run
 ```
 
 ## gRPC endpoints:
