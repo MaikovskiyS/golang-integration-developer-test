@@ -3,6 +3,9 @@ package app
 import (
 	"fmt"
 	"net"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"integration.v1/pkg/rpc"
 
@@ -30,14 +33,30 @@ func Run(cfg *config.Config) error {
 	// Register gRPC server
 	gamer.RegisterServiceServer(s, transport.New(svc))
 
-	l, err := net.Listen("tcp", fmt.Sprintf(":%s", cfg.Port))
-	if err != nil {
-		return err
-	}
+	go func() {
+		fmt.Printf("gRPC server starting on :%s", cfg.Port)
+		listener, err := net.Listen("tcp", fmt.Sprintf(":%s", cfg.Port))
+		if err != nil {
+			logger.Error(err.Error())
+		}
 
-	fmt.Printf("gRPC server starting on :%s", cfg.Port)
-	if err := s.Serve(l); err != nil {
-		return err
-	}
+		if err = s.Serve(listener); err != nil {
+
+			return
+		}
+	}()
+
+	// shutdown.
+	idleConnsClosed := make(chan struct{})
+	sigCh := make(chan os.Signal, 1)
+	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+	go func() {
+		<-sigCh
+
+		s.GracefulStop()
+		close(idleConnsClosed)
+	}()
+
+	<-idleConnsClosed
 	return nil
 }
