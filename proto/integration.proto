@@ -1,6 +1,11 @@
 syntax = "proto3";
 
 package integration.v1;
+option go_package ="./gen/gamer";
+
+
+
+
 
 service Service {
   rpc GetBalance(GetBalanceRequest) returns (GetBalanceResponse) {}
